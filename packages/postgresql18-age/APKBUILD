@@ -1,0 +1,35 @@
+pkgname=postgresql-age
+pkgver=1.7.0
+_pkgver="${pkgver}"
+pkgrel=1
+pkgdesc="Graph database optimized for fast analysis and real-time data processing"
+url="https://github.com/apache/age"
+arch="all"
+license="Apache-2.0 AND PostgreSQL"
+_pgver=18
+makedepends="
+	bison
+	flex
+	perl
+	postgresql$_pgver
+	postgresql$_pgver-dev
+	"
+source="https://dlcdn.apache.org/age/PG$_pgver/$_pkgver/apache-age-$_pkgver-src.tar.gz"
+builddir="$srcdir/apache-age-$_pkgver"
+options="!check"  # tests require running PostgreSQL
+
+export PG_CONFIG="/usr/libexec/postgresql$_pgver/pg_config"
+
+build() {
+	make -j1
+}
+
+package() {
+	depends="postgresql$_pgver"
+
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+129e64d70ec82e0fb47202145af45915b335048472c9a869129c31e4cb59f15a271a929a36a7abb2822272591e6476786c36908cb35a10cd73f2ecd0a617d3bb  apache-age-1.7.0-src.tar.gz
+"
