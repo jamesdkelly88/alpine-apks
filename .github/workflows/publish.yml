@@ -45,6 +45,20 @@ jobs:
         run: addgroup runner abuild
         shell: alpine.sh --root {0}
 
-      - name: Test abuild
-        run: abuild -V
+      - name: Store RSA Keys
+        run: |
+          echo "$RSA_PRIVATE_KEY" > "$HOME/$GITHUB_REPOSITORY_OWNER.rsa"
+          echo "$RSA_PUBLIC_KEY" > "$HOME/$GITHUB_REPOSITORY_OWNER.rsa.pub"
+          cp "$HOME/$GITHUB_REPOSITORY_OWNER.rsa.pub" /etc/apk/keys
+
+          ls -al $HOME
+
+          ls -al /etc/apk/keys
         shell: alpine.sh {0}
+        env:
+          RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
+          RSA_PUBLIC_KEY: ${{ secrets.RSA_PUBLIC_KEY }}
+
+      # - name: Test abuild
+      #   run: abuild -V
+      #   shell: alpine.sh {0}
