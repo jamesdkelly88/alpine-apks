@@ -55,11 +55,17 @@ jobs:
 
       - name: Test abuild
         run: |
-          export REPODEST="$HOME/packages"
+          export REPODEST="$HOME/output"
           export PACKAGER_PRIVKEY="$HOME/$GITHUB_REPOSITORY_OWNER.rsa"
 
-          pwd
-          ls -al
+          cd packages/postgresql18-age
+
+          abuild -r
+
         shell: alpine.sh {0}
         env:
           PACKAGER: James Kelly <jamesdkelly88@outlook.com>
+
+      - name: Check results
+        run: ls -al $HOME/output
+        shell: alpine.sh {0}
