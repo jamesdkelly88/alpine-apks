@@ -43,7 +43,7 @@ jobs:
           branch: v3.23
 
       - name: File list check
-        run: ls -alR .
+        run: ls -lR .
         shell: alpine.sh {0}
 
       # - name: Get OS Version
@@ -71,7 +71,7 @@ jobs:
           export REPODEST="$HOME/output"
           export PACKAGER_PRIVKEY="$HOME/$GITHUB_REPOSITORY_OWNER.rsa"
 
-          cd packages/postgresql18-age
+          cd source/packages/postgresql18-age
 
           abuild -r
 
@@ -80,7 +80,7 @@ jobs:
           PACKAGER: James Kelly <jamesdkelly88@outlook.com>
 
       - name: Check results
-        run: ls -alR $HOME/output
+        run: ls -lR $HOME/output
         shell: alpine.sh {0}
 
       - name: Test GH page update
