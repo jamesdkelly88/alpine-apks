@@ -30,6 +30,12 @@ jobs:
         with:
           branch: v3.23
       - run: |
+          # os version
           cat /etc/os-release
+          
+          # user name
           whoami
+
+          # package install
+          apk add alpine-sdk
         shell: alpine.sh {0}
