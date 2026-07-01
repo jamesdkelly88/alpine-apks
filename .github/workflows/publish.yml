@@ -85,13 +85,15 @@ jobs:
 
       - name: Test GH page update
         run: |
-          git checkout --progress --force -B "$GH_PAGES_BRANCH" refs/remotes/origin/"$GH_PAGES_BRANCH"
-          ls -alR
+          cd pages/
           echo "<p>This came from an action</p>" > index.html
 
-          git add .
-          git -c user.name="$GITHUB_ACTOR" -c user.email="$GITHUB_ACTOR@users.noreply.github.com" commit -m "Update packages" && \
-          git push origin "$GH_PAGES_BRANCH" || echo Nothing to commit
+          date > generated.txt
+          # Note: the following account information will not work on GHES
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Update packages" && git push || echo Nothing to commit
         shell: alpine.sh {0}
         env:
           GH_PAGES_BRANCH: gh-pages
