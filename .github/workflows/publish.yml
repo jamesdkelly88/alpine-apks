@@ -67,5 +67,18 @@ jobs:
           PACKAGER: James Kelly <jamesdkelly88@outlook.com>
 
       - name: Check results
-        run: ls -al $HOME/output
+        run: ls -alR $HOME/output
         shell: alpine.sh {0}
+
+      - name: Test GH page update
+        run: |
+          git checkout --progress --force -B "$GH_PAGES_BRANCH" refs/remotes/origin/"$GH_PAGES_BRANCH"
+          ls -alR
+          echo "<p>This came from an action</p>" > index.html
+
+          git add .
+          git -c user.name="$GITHUB_ACTOR" -c user.email="$GITHUB_ACTOR@users.noreply.github.com" commit -m "Update packages" && \
+          git push origin "$GH_PAGES_BRANCH" || echo Nothing to commit
+        shell: alpine.sh {0}
+        env:
+          GH_PAGES_BRANCH: gh-pages
