@@ -26,16 +26,25 @@ jobs:
   testing:
     runs-on: ubuntu-latest
     steps:
-      - uses: jirutka/setup-alpine@v1
+      - uses: actions/checkout@v4  
+
+      - name: Setup Alpine Linux v3.23
+        uses: jirutka/setup-alpine@v1
         with:
           branch: v3.23
-      - run: |
-          # os version
-          cat /etc/os-release
 
-          # user name
-          whoami
+      - name: Get OS Version
+        run: cat /etc/os-release
+        shell: alpine.sh {0}
 
-          # package install
-          sudo apk add alpine-sdk
+      - name: Install abuild
+        run: apk add alpine-sdk
+        shell: alpine.sh --root {0}
+
+      - name: Add runner user to abuild group
+        run: addgroup runner abuild
+        shell: alpine.sh --root {0}
+
+      - name: Test abuild
+        run: abuild -V
         shell: alpine.sh {0}
