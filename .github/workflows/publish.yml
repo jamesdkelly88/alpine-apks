@@ -32,10 +32,10 @@ jobs:
       - run: |
           # os version
           cat /etc/os-release
-          
+
           # user name
           whoami
 
           # package install
-          apk add alpine-sdk
+          sudo apk add alpine-sdk
         shell: alpine.sh {0}
