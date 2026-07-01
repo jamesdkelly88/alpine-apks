@@ -26,16 +26,29 @@ jobs:
   testing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  
+      - name: Checkout source branch
+        uses: actions/checkout@v7
+        with:
+          path: source
+
+      - name: Checkout pages branch
+        uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+          path: pages
 
       - name: Setup Alpine Linux v3.23
         uses: jirutka/setup-alpine@v1
         with:
           branch: v3.23
 
-      - name: Get OS Version
-        run: cat /etc/os-release
+      - name: File list check
+        run: ls -alR .
         shell: alpine.sh {0}
+
+      # - name: Get OS Version
+      #   run: cat /etc/os-release
+      #   shell: alpine.sh {0}
 
       - name: Install and configure abuild
         run: |
