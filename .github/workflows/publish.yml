@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ivanvc/abuild-releaser-action@v1.1.0
+      - uses: ivanvc/abuild-releaser-action@v1.2.0
         with:
           author: James Kelly <jamesdkelly88@outlook.com>
           rsa_public_key: ${{ secrets.RSA_PUBLIC_KEY }}
