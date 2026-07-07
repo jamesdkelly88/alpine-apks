@@ -42,9 +42,9 @@ jobs:
         with:
           branch: v3.23
 
-      - name: File list check
-        run: ls -lR .
-        shell: alpine.sh {0}
+      # - name: File list check
+      #   run: ls -lR .
+      #   shell: alpine.sh {0}
 
       # - name: Get OS Version
       #   run: cat /etc/os-release
@@ -89,7 +89,11 @@ jobs:
           echo "<p>This came from an action</p>" > index.html
 
           date > generated.txt
-          # Note: the following account information will not work on GHES
+
+          mkdir -p ./v3.23
+
+          cp -R $HOME/output/packages/* v3.23/
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A

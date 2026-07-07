@@ -1,4 +1,4 @@
-pkgname=postgresql-age
+pkgname=postgresql18-age
 pkgver=1.7.0
 _pkgver="${pkgver}"
 pkgrel=1
