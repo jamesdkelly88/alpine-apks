@@ -1,0 +1,21 @@
+name: Build
+description: Build an Alpine package repository for a specified version and architecture
+inputs:
+  alpine:
+    description: Alpine Linux version
+    required: true
+  arch:
+    description: Architecture
+    required: true
+runs:
+  using: composite
+  steps:
+  - name: Setup Alpine Linux shell
+    uses: jirutka/setup-alpine@v1
+    with:
+      branch: v${{ inputs.alpine }}
+      arch: ${{ inputs.arch }}
+      shell-name: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh
+  - name: Check
+    run: uname -a && cat /etc/os-release
+    shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}

@@ -1,9 +1,9 @@
 name: Test
 
 on: 
-  push:
-    branches:
-      - draft
+  # push:
+  #   branches:
+  #     - draft
   workflow_dispatch:
 
 permissions:

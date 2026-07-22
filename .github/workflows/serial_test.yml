@@ -1,0 +1,31 @@
+name: Test2
+
+on: 
+  push:
+    branches:
+      - draft
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: v3.23 x86_64
+      uses: ./.github/actions/build
+      with:
+        alpine: "3.23"
+        arch: x86_64
+    - name: v3.24 x86_64
+      uses: ./.github/actions/build
+      with:
+        alpine: "3.24"
+        arch: x86_64
+    - name: v3.24 armhf
+      uses: ./.github/actions/build
+      with:
+        alpine: "3.24"
+        arch: armhf
