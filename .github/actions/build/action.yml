@@ -16,6 +16,32 @@ runs:
       branch: v${{ inputs.alpine }}
       arch: ${{ inputs.arch }}
       shell-name: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh
-  - name: Check
-    run: uname -a && cat /etc/os-release
+      packages: alpine-sdk lua-aports sudo
+  - name: Setup build environment
+    run: |
+      addgroup runner abuild
+      cp "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub" /etc/apk/keys
+    shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh --root {0}
+  # - name: Check
+  #   run: |
+  #     pwd
+  #     whoami
+  #     groups
+  #     echo $HOME
+  #     uname -a
+  #     cat /etc/os-release
+  #     ls -lR
+  #     ls -l /etc/apk/keys
+  #   shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}
+  - name: Build repository
+    run: |
+      mkdir -p $LOGDIR
+      mkdir -p $OUTDIR
+      buildrepo -p -l $LOGDIR -a . -d $OUTDIR packages
+      ls -lR 
     shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}
+    env:
+      LOGDIR: logs/v${{ inputs.alpine }}
+      OUTDIR: output/v${{ inputs.alpine }}
+      PACKAGER: James Kelly <jamesdkelly88@outlook.com>
+      PACKAGER_PRIVKEY: "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"

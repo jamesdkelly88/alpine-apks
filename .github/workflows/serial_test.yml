@@ -13,19 +13,38 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-    - name: v3.23 x86_64
+    - name: Checkout source branch
+      uses: actions/checkout@v7
+
+    - name: Checkout pages branch
+      uses: actions/checkout@v7
+      with:
+        ref: gh-pages
+        path: pages
+
+    - name: Setup secrets
+      run: |
+        echo "$RSA_PRIVATE_KEY" > "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"
+        echo "$RSA_PUBLIC_KEY" > "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub"
+        ls -lR
+      env:
+          RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
+          RSA_PUBLIC_KEY: ${{ secrets.RSA_PUBLIC_KEY }}
+
+    - name: Build v3.23 (x86_64)
       uses: ./.github/actions/build
       with:
         alpine: "3.23"
         arch: x86_64
-    - name: v3.24 x86_64
-      uses: ./.github/actions/build
-      with:
-        alpine: "3.24"
-        arch: x86_64
-    - name: v3.24 armhf
-      uses: ./.github/actions/build
-      with:
-        alpine: "3.24"
-        arch: armhf
+
+    # # - name: Build v3.24 (x86_64)
+    # #   uses: ./.github/actions/build
+    # #   with:
+    # #     alpine: "3.24"
+    # #     arch: x86_64
+
+    # - name: Build v3.24 (armhf)
+    #   uses: ./.github/actions/build
+    #   with:
+    #     alpine: "3.24"
+    #     arch: armhf
