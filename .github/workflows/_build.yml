@@ -1,0 +1,24 @@
+name: Reusable
+
+on:
+  workflow_call:
+    inputs:
+      alpine:
+        required: true
+        type: string
+      arch:
+        required: true
+        type: string
+      runner:
+        required: true
+        type: string
+
+jobs:
+  example:
+    # name: Example
+    runs-on: ${{ inputs.runner }}
+    container:
+      image: alpine:${{ inputs.alpine }}
+    steps:
+      - name: Check
+        run: uname -a && cat /etc/os-release
