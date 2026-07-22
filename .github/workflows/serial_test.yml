@@ -36,6 +36,7 @@ jobs:
       with:
         alpine: "3.23"
         arch: x86_64
+        repository: postgresql
 
     # # - name: Build v3.24 (x86_64)
     # #   uses: ./.github/actions/build

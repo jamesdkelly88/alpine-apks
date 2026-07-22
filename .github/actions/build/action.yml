@@ -2,10 +2,13 @@ name: Build
 description: Build an Alpine package repository for a specified version and architecture
 inputs:
   alpine:
-    description: Alpine Linux version
+    description: Alpine Linux version to build on
     required: true
   arch:
-    description: Architecture
+    description: Architecture to build
+    required: true
+  repository:
+    description: Subfolder to build
     required: true
 runs:
   using: composite
@@ -35,13 +38,8 @@ runs:
   #   shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}
   - name: Build repository
     run: |
-      mkdir -p $LOGDIR
-      mkdir -p $OUTDIR
-      buildrepo -p -l $LOGDIR -a . -d $OUTDIR packages
-      ls -lR 
+      export PACKAGER=$GITHUB_REPOSITORY_OWNER
+      export PACKAGER_PRIVKEY="$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"
+      buildrepo -p -a . ${{ inputs.repository }}
+      ls -lR ~
     shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}
-    env:
-      LOGDIR: logs/v${{ inputs.alpine }}
-      OUTDIR: output/v${{ inputs.alpine }}
-      PACKAGER: James Kelly <jamesdkelly88@outlook.com>
-      PACKAGER_PRIVKEY: "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"
