@@ -11,23 +11,21 @@ permissions:
 
 jobs:
   build:
-    name: Build Alpine ${{ matrix.alpine }} ${{ matrix.arch }}
+    name: Alpine ${{ matrix.alpine }} ${{ matrix.arch }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - alpine: "3.23"
             arch: x86_64
-            runner: ubuntu-latest
           - alpine: "3.24"
             arch: x86_64
-            runner: ubuntu-latest
           - alpine: "3.23"
             arch: aarch64
-            runner: ubuntu-24.04-arm
+          - alpine: "3.24"
+            arch: armhf
     uses:
       ./.github/workflows/_build.yml
     with:
       alpine: ${{ matrix.alpine }}
       arch: ${{ matrix.arch }}
-      runner: ${{ matrix.runner }}
