@@ -41,5 +41,4 @@ runs:
       export PACKAGER=$GITHUB_REPOSITORY_OWNER
       export PACKAGER_PRIVKEY="$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"
       buildrepo -p -a . -d "/home/runner/work/output/v${{ inputs.alpine }}" ${{ inputs.repository }}
-      ls -lR ~
     shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}

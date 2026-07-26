@@ -1,4 +1,4 @@
-name: Publish
+name: publish
 
 on: 
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout source branch
@@ -43,25 +43,27 @@ jobs:
       with:
         alpine: "3.24"
         arch: x86_64
+        repository: postgresql
 
     - name: Build v3.24 (armhf)
       uses: ./.github/actions/build
       with:
         alpine: "3.24"
         arch: armhf
+        repository: postgresql
 
     - name: Output to Pages
       run: |
           cd pages/
           # Timestamp
-          date > generated.txt
+          date > last_updated.txt
           # Public key
           cp "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub" .
           # Packages
           cp -R /home/runner/work/output/* .
           # TODO: Indexes
+          ../.scripts/build-indexes.sh
           # TODO: Landing page
-          echo "Test" > index.html
           # Commit
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
