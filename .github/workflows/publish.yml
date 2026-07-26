@@ -3,7 +3,7 @@ name: publish
 on: 
   push:
     branches:
-      - draft
+      - main
   workflow_dispatch:
 
 permissions:
@@ -26,7 +26,6 @@ jobs:
       run: |
         echo "$RSA_PRIVATE_KEY" > "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"
         echo "$RSA_PUBLIC_KEY" > "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub"
-        ls -lR
       env:
           RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
           RSA_PUBLIC_KEY: ${{ secrets.RSA_PUBLIC_KEY }}

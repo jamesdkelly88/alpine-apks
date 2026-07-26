@@ -25,17 +25,6 @@ runs:
       addgroup runner abuild
       cp "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub" /etc/apk/keys
     shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh --root {0}
-  # - name: Check
-  #   run: |
-  #     pwd
-  #     whoami
-  #     groups
-  #     echo $HOME
-  #     uname -a
-  #     cat /etc/os-release
-  #     ls -lR
-  #     ls -l /etc/apk/keys
-  #   shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}
   - name: Build repository
     run: |
       export PACKAGER=$GITHUB_REPOSITORY_OWNER
