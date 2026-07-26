@@ -81,7 +81,7 @@ Deployed via GitHub actions:
     ```
 2. Add to repository list (set version as required)
     ```sh
-    echo "https://jamesdkelly88.github.io/alpine-apks/v3.24" | sudo tee -a /etc/apk/repositories
+    echo "https://jamesdkelly88.github.io/alpine-apks/v3.24/postgresql" | sudo tee -a /etc/apk/repositories
     sudo apk update
     ```
 3. Install package(s)
