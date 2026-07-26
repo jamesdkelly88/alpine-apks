@@ -44,6 +44,13 @@ jobs:
         arch: x86_64
         repository: postgresql
 
+    - name: Build v3.24 (aarch64)
+      uses: ./.github/actions/build
+      with:
+        alpine: "3.24"
+        arch: aarch64
+        repository: postgresql
+
     - name: Build v3.24 (armhf)
       uses: ./.github/actions/build
       with:
