@@ -49,3 +49,21 @@ jobs:
     #   with:
     #     alpine: "3.24"
     #     arch: armhf
+
+    - name: Output to Pages
+      run: |
+          cd pages/
+          # Timestamp
+          date > generated.txt
+          # Public key
+          cp "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub" .
+          # Packages
+          cp -R /home/runner/work/output/* .
+          # TODO: Indexes
+          # TODO: Landing page
+          echo "Test" > index.html
+          # Commit
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Update packages" && git push || echo Nothing to commit

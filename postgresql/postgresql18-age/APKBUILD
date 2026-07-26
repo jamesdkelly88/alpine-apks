@@ -1,7 +1,7 @@
 pkgname=postgresql18-age
 pkgver=1.7.0
 _pkgver="${pkgver}"
-pkgrel=1
+pkgrel=0
 pkgdesc="Graph database optimized for fast analysis and real-time data processing"
 url="https://github.com/apache/age"
 arch="all"
