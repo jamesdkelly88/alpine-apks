@@ -1,0 +1,33 @@
+name: Build
+description: Build an Alpine package repository for a specified version and architecture
+inputs:
+  alpine:
+    description: Alpine Linux version to build on
+    required: true
+  arch:
+    description: Architecture to build
+    required: true
+  repository:
+    description: Subfolder to build
+    required: true
+runs:
+  using: composite
+  steps:
+  - name: Setup Alpine Linux shell
+    uses: jirutka/setup-alpine@v1
+    with:
+      branch: v${{ inputs.alpine }}
+      arch: ${{ inputs.arch }}
+      shell-name: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh
+      packages: alpine-sdk lua-aports sudo
+  - name: Setup build environment
+    run: |
+      addgroup runner abuild
+      cp "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub" /etc/apk/keys
+    shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh --root {0}
+  - name: Build repository
+    run: |
+      export PACKAGER=$GITHUB_REPOSITORY_OWNER
+      export PACKAGER_PRIVKEY="$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"
+      buildrepo -p -a . -d "/home/runner/work/output/v${{ inputs.alpine }}" ${{ inputs.repository }}
+    shell: alpine${{ inputs.alpine }}-${{ inputs.arch }}.sh {0}
