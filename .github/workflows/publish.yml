@@ -1,103 +1,69 @@
 name: Publish
 
-on:
+on: 
   push:
     branches:
       - draft
+  workflow_dispatch:
 
 permissions:
   contents: write
 
-# jobs:
-#   release:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: ivanvc/abuild-releaser-action@main
-#         with:
-#           author: James Kelly <jamesdkelly88@outlook.com>
-#           rsa_public_key: ${{ secrets.RSA_PUBLIC_KEY }}
-#           rsa_private_key: ${{ secrets.RSA_PRIVATE_KEY }}
-#           generate_index_pages: true
-#           # generate_single_index_page: false
-#           # alpine_branch: v3.23
-
 jobs:
-  testing:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source branch
-        uses: actions/checkout@v7
-        with:
-          path: source
+    - name: Checkout source branch
+      uses: actions/checkout@v7
 
-      - name: Checkout pages branch
-        uses: actions/checkout@v7
-        with:
-          ref: gh-pages
-          path: pages
+    - name: Checkout pages branch
+      uses: actions/checkout@v7
+      with:
+        ref: gh-pages
+        path: pages
 
-      - name: Setup Alpine Linux v3.23
-        uses: jirutka/setup-alpine@v1
-        with:
-          branch: v3.23
-
-      # - name: File list check
-      #   run: ls -lR .
-      #   shell: alpine.sh {0}
-
-      # - name: Get OS Version
-      #   run: cat /etc/os-release
-      #   shell: alpine.sh {0}
-
-      - name: Install and configure abuild
-        run: |
-          apk add alpine-sdk
-          addgroup runner abuild
-        shell: alpine.sh --root {0}
-
-      - name: Store RSA Keys
-        run: |
-          echo "$RSA_PRIVATE_KEY" > "$HOME/$GITHUB_REPOSITORY_OWNER.rsa"
-          echo "$RSA_PUBLIC_KEY" > "$HOME/$GITHUB_REPOSITORY_OWNER.rsa.pub"
-          cp "$HOME/$GITHUB_REPOSITORY_OWNER.rsa.pub" /etc/apk/keys
-        shell: alpine.sh --root {0}
-        env:
+    - name: Setup secrets
+      run: |
+        echo "$RSA_PRIVATE_KEY" > "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa"
+        echo "$RSA_PUBLIC_KEY" > "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub"
+        ls -lR
+      env:
           RSA_PRIVATE_KEY: ${{ secrets.RSA_PRIVATE_KEY }}
           RSA_PUBLIC_KEY: ${{ secrets.RSA_PUBLIC_KEY }}
 
-      - name: Test abuild
-        run: |
-          export REPODEST="$HOME/output"
-          export PACKAGER_PRIVKEY="$HOME/$GITHUB_REPOSITORY_OWNER.rsa"
+    - name: Build v3.23 (x86_64)
+      uses: ./.github/actions/build
+      with:
+        alpine: "3.23"
+        arch: x86_64
+        repository: postgresql
 
-          cd source/packages/postgresql18-age
+    - name: Build v3.24 (x86_64)
+      uses: ./.github/actions/build
+      with:
+        alpine: "3.24"
+        arch: x86_64
 
-          abuild -r
+    - name: Build v3.24 (armhf)
+      uses: ./.github/actions/build
+      with:
+        alpine: "3.24"
+        arch: armhf
 
-        shell: alpine.sh {0}
-        env:
-          PACKAGER: James Kelly <jamesdkelly88@outlook.com>
-
-      - name: Check results
-        run: ls -lR $HOME/output
-        shell: alpine.sh {0}
-
-      - name: Test GH page update
-        run: |
+    - name: Output to Pages
+      run: |
           cd pages/
-          echo "<p>This came from an action</p>" > index.html
-
+          # Timestamp
           date > generated.txt
-
-          mkdir -p ./v3.23
-
-          cp -R $HOME/output/packages/* v3.23/
-
+          # Public key
+          cp "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub" .
+          # Packages
+          cp -R /home/runner/work/output/* .
+          # TODO: Indexes
+          # TODO: Landing page
+          echo "Test" > index.html
+          # Commit
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "Update packages" && git push || echo Nothing to commit
-        shell: alpine.sh {0}
-        env:
-          GH_PAGES_BRANCH: gh-pages
