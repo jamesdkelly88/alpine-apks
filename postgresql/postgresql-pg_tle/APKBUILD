@@ -1,0 +1,28 @@
+pkgname=postgresql-pg_tle
+pkgver=1.5.2
+_pkgver="${pkgver}"
+pkgrel=0
+pkgdesc="Trusted Language Extensions for PostgreSQL"
+url="https://github.com/aws/pg_tle"
+arch="all"
+license="Apache-2.0"
+_pgver=18
+makedepends="
+	flex
+	postgresql$_pgver
+	postgresql$_pgver-dev
+	"
+source="$pkgname-$pkgver.tar.gz::https://github.com/aws/pg_tle/archive/refs/tags/v$_pkgver.tar.gz"
+builddir="$srcdir/pg_tle-$pkgver"
+
+build() {
+	make
+}
+
+package() {
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="
+5f6f0e0734865049736e5ccf4abd3aaf15f9576f5fec22fe735133338b1219dddb8610e2131e2930287376646e4228998656a93120e7098f148218c4355b815d  postgresql-pg_tle-1.5.2.tar.gz
+"

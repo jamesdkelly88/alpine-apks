@@ -70,7 +70,7 @@ Deployed via GitHub actions:
 ## Packages
 
 - postgresql18-age
-
+- postgresql-pg_tle
 
 ### Installing
 
