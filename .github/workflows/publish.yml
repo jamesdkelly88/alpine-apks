@@ -61,12 +61,13 @@ jobs:
     - name: Output to Pages
       run: |
           cd pages/
+
+          ls -lR # TODO: remove this again
+          
           # Timestamp
           date > last_updated.txt
           # Public key
           cp "$GITHUB_WORKSPACE/$GITHUB_REPOSITORY_OWNER.rsa.pub" .
-          # Packages
-          cp -R /home/runner/work/output/* .
           # TODO: Indexes
           ../.scripts/build-indexes.sh
           # TODO: Landing page

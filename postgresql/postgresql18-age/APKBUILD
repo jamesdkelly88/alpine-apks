@@ -1,7 +1,7 @@
 pkgname=postgresql18-age
 pkgver=1.7.0
 _pkgver="${pkgver}"
-pkgrel=0
+pkgrel=1
 pkgdesc="Graph database optimized for fast analysis and real-time data processing"
 url="https://github.com/apache/age"
 arch="all"
@@ -17,6 +17,7 @@ makedepends="
 source="https://dlcdn.apache.org/age/PG$_pgver/$_pkgver/apache-age-$_pkgver-src.tar.gz"
 builddir="$srcdir/apache-age-$_pkgver"
 options="!check"  # tests require running PostgreSQL
+install="$pkgname.post-install"
 
 export PG_CONFIG="/usr/libexec/postgresql$_pgver/pg_config"
 

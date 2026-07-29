@@ -1,7 +1,7 @@
 pkgname=postgresql-pg_tle
 pkgver=1.5.2
 _pkgver="${pkgver}"
-pkgrel=0
+pkgrel=1
 pkgdesc="Trusted Language Extensions for PostgreSQL"
 url="https://github.com/aws/pg_tle"
 arch="all"
@@ -14,6 +14,7 @@ makedepends="
 	"
 source="$pkgname-$pkgver.tar.gz::https://github.com/aws/pg_tle/archive/refs/tags/v$_pkgver.tar.gz"
 builddir="$srcdir/pg_tle-$pkgver"
+install="$pkgname.post-install"
 
 build() {
 	make
